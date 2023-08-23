@@ -5,6 +5,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Moq;
 
 namespace ApiAssessmentTest.V1.Controller
@@ -202,9 +203,9 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<appuser>();
+            okResult.Value.Should().BeAssignableTo<appuser>();
 
-            
+
         }
 
         [Fact]
@@ -240,6 +241,7 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.EditAppUser(id, appuser);
 
             // Assert
+            
             var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
