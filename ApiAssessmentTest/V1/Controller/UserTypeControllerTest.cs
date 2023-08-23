@@ -25,7 +25,7 @@ namespace ApiAssessmentTest
         }
 
         [Fact]
-        public async Task AddUserType_ValidInput_ReturnsOkResult()
+        public async Task AddUserType_ValidUserType_ReturnsOkResult()
         {
             // Arrange
             var usertype = fixture.Create<usertype>();
@@ -45,7 +45,7 @@ namespace ApiAssessmentTest
             resultValue.Should().BeEquivalentTo(expectedUserTypeDetail);
         }
         [Fact]
-        public void AddUserType_ShouldReturnBadRequest_WhenUserTypeIdNull()
+        public void AddUserType_WhenUserTypeIdNull_ShouldReturnBadRequest()
         {
             //Arrange
             var user = fixture.Create<usertype>();
@@ -76,12 +76,12 @@ namespace ApiAssessmentTest
             var result = await _sut.AddUserType(usertype);
 
             // Assert
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeOfType<StatusCodeResult>().Subject
+                  .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
 
         [Fact]
-        public async Task GetAllUserTypes_NotEmptyList_ReturnsOkResultWithUserTypes()
+        public async Task GetAllUserTypes_NotEmptyUserType_ReturnsOkResultWithUserTypes()
         {
                 // Arrange
                 var expectedUserTypes = fixture.Create<IEnumerable<usertype>>();
@@ -101,7 +101,7 @@ namespace ApiAssessmentTest
         }
 
         [Fact]
-        public async Task GetAllUserTypes_EmptyList_ReturnsNotFoundResult()
+        public async Task GetAllUserTypes_EmptyUserType_ReturnsNotFoundResult()
         {
             // Arrange
 
@@ -128,8 +128,8 @@ namespace ApiAssessmentTest
             var result = await _sut.GetAllUserTypes();
 
             // Assert
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeOfType<StatusCodeResult>().Subject
+                  .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
         public async Task EditUserType_ValidUserTypeId_ReturnsOkResult()
@@ -184,8 +184,8 @@ namespace ApiAssessmentTest
             var result = await _sut.EditUserType(id, usertype);
 
             // Assert
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+             result.Should().BeOfType<StatusCodeResult>().Subject
+                   .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
     }
 }
