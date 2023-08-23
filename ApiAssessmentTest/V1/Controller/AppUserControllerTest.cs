@@ -95,11 +95,9 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.GetAllAppUser();
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-
-            var resultValue = okResult.Value.Should().BeAssignableTo<List<appuser>>().Subject;
-
-            resultValue.Should().BeEquivalentTo(expectedAppUsers);
+            result.Should().BeOfType<OkObjectResult>().Subject.Value
+                  .Should().BeAssignableTo<List<appuser>>().Subject
+                  .Should().BeEquivalentTo(expectedAppUsers);
         }
 
         [Fact]
@@ -146,10 +144,9 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.GetAllAppUserByUserType(userType);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<IEnumerable<appuser>>().Subject;
-
-            resultValue.Should().BeEquivalentTo(expectedAppUsers);
+            result.Should().BeOfType<OkObjectResult>().Subject.Value
+                  .Should().BeAssignableTo<IEnumerable<appuser>>().Subject
+                  .Should().BeEquivalentTo(expectedAppUsers);
         }
 
         [Fact]
@@ -244,7 +241,7 @@ namespace ApiAssessmentTest.V1.Controller
             // Assert
             
             result.Should().BeOfType<StatusCodeResult>().Subject
-                .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                  .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
         public async Task DeleteAppUser_ValidAppUserId_ReturnsOkResult()
@@ -261,10 +258,9 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.DeleteAppUser(idToDelete);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<appuser>().Subject;
-
-            resultValue.Should().BeEquivalentTo(expectedDeletedUser);
+            result.Should().BeOfType<OkObjectResult>().Subject
+                    .Value.Should().BeAssignableTo<appuser>().Subject
+                    .Should().BeEquivalentTo(expectedDeletedUser);
         }
 
         [Fact]

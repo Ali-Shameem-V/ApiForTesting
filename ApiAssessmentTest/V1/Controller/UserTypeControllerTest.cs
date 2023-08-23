@@ -95,9 +95,8 @@ namespace ApiAssessmentTest
 
                 // Assert
                 var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-                var resultValue = okResult.Value.Should().BeAssignableTo<IEnumerable<usertype>>().Subject;
-
-                resultValue.Should().BeEquivalentTo(expectedUserTypes);
+                okResult.Value.Should().BeAssignableTo<IEnumerable<usertype>>().Which
+                        .Should().BeEquivalentTo(expectedUserTypes);
         }
 
         [Fact]
@@ -147,10 +146,9 @@ namespace ApiAssessmentTest
             var result = await _sut.EditUserType(id, usertype);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<usertype>().Subject;
-
-            resultValue.Should().BeEquivalentTo(expectedUserTypeToEdit);
+            result.Should().BeOfType<OkObjectResult>().Which.Value
+                  .Should().BeAssignableTo<usertype>().Which
+                  .Should().BeEquivalentTo(expectedUserTypeToEdit);
         }
 
         [Fact]
