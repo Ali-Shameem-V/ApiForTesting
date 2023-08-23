@@ -39,10 +39,9 @@ namespace ApiAssessmentTest
             var result = await _sut.AddUserType(usertype);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<usertype>().Subject;
-
-            resultValue.Should().BeEquivalentTo(expectedUserTypeDetail);
+             result.Should().BeOfType<OkObjectResult>().Subject
+                   .Value.Should().BeAssignableTo<usertype>().Subject
+                   .Should().BeEquivalentTo(expectedUserTypeDetail);
         }
         [Fact]
         public void AddUserType_WhenUserTypeIdNull_ShouldReturnBadRequest()
@@ -94,10 +93,9 @@ namespace ApiAssessmentTest
                 var result = await _sut.GetAllUserTypes();
 
                 // Assert
-                var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-                var resultValue = okResult.Value.Should().BeAssignableTo<IEnumerable<usertype>>().Subject;
-
-                resultValue.Should().BeEquivalentTo(expectedUserTypes);
+                 result.Should().BeOfType<OkObjectResult>().Subject
+                       .Value.Should().BeAssignableTo<IEnumerable<usertype>>().Subject
+                       .Should().BeEquivalentTo(expectedUserTypes);
         }
 
         [Fact]
@@ -147,10 +145,9 @@ namespace ApiAssessmentTest
             var result = await _sut.EditUserType(id, usertype);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<usertype>().Subject;
-
-            resultValue.Should().BeEquivalentTo(expectedUserTypeToEdit);
+            result.Should().BeOfType<OkObjectResult>().Subject.Value
+                  .Should().BeAssignableTo<usertype>().Subject
+                  .Should().BeEquivalentTo(expectedUserTypeToEdit);
         }
 
         [Fact]
