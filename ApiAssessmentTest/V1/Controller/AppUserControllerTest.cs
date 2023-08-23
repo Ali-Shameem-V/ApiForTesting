@@ -181,7 +181,7 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             result.Should().BeOfType<StatusCodeResult>().Subject
-                .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+                  .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
         public async Task EditAppUser_ValidAppUserId_ReturnsOkResultWithModifiedData()
@@ -201,7 +201,7 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
              result.Should().BeOfType<OkObjectResult>().Subject
-                .Value.Should().BeAssignableTo<appuser>();
+                   .Value.Should().BeAssignableTo<appuser>();
 
 
         }
@@ -295,7 +295,7 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
              result.Should().BeOfType<StatusCodeResult>().Subject
-                .StatusCode.Should().Be(500);
+                   .StatusCode.Should().Be(500);
         }
     }
 }
