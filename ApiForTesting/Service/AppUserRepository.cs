@@ -16,18 +16,17 @@ namespace ApiForTesting.Service
 
         public async Task<appuser> AddAppUser(appuser appuser)
         {
-            var user = await apiDbContext.usertypes_shameem.FindAsync(appuser.UserTypeId);
+            var usertype = await apiDbContext.usertypes_shameem.FindAsync(appuser.UserTypeId);
 
-               if(user != null) 
+               if(usertype != null) 
                {
-                apiDbContext.appusers_shameem.AddAsync(appuser);
+                await apiDbContext.appusers_shameem.AddAsync(appuser);
                 await apiDbContext.SaveChangesAsync();
                 return appuser;
                 }
            
                 return null;    
-               
-            
+                          
                   
         }
         public async Task<IEnumerable<appuser>> GetAllAppUser()

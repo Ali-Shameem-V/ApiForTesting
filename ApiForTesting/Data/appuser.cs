@@ -14,7 +14,6 @@ namespace ApiForTesting.Data
         public string? UserName { get; set; }
 
         public string? Password { get; set; }
-
         public int? IsActive { get; set; }
         [JsonIgnore]
         public usertype? UserType { get; set; }

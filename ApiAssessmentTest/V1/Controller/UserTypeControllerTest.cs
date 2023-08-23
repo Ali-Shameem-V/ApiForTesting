@@ -45,14 +45,13 @@ namespace ApiAssessmentTest
             resultValue.Should().BeEquivalentTo(expectedUserTypeDetail);
         }
         [Fact]
-        public void AddUserType_ShouldReturnBadRequest_WhenPrimarykeyIsNull()
+        public void AddUserType_ShouldReturnBadRequest_WhenUserTypeIdNull()
         {
             //Arrange
             var user = fixture.Create<usertype>();
             user.UserTypeId = null;
-            var expectedExceptionMessage = "Please give a valid Primary key";
             var returnData = fixture.Create<usertype>();
-            usertypeInterface.Setup(c => c.AddUserType(user)).Throws(new Exception(expectedExceptionMessage));
+            usertypeInterface.Setup(c => c.AddUserType(user)).ReturnsAsync((usertype)null);
             //Act
             var result = _sut.AddUserType(user);
             //Assert
@@ -67,7 +66,6 @@ namespace ApiAssessmentTest
         public async Task AddUserType_Exception_ReturnsInternalServerError()
         {
             // Arrange
-            var fixture = new Fixture();
             var usertype = fixture.Create<usertype>();
 
             usertypeInterface.Setup(x => x.AddUserType(usertype))
@@ -107,7 +105,8 @@ namespace ApiAssessmentTest
         {
             // Arrange
 
-            usertypeInterface.Setup(x => x.GetAllUserTypes()).ReturnsAsync((IEnumerable<usertype>)null);
+            usertypeInterface.Setup(x => x.GetAllUserTypes())
+                .ReturnsAsync((IEnumerable<usertype>)null);
 
 
             // Act
@@ -133,7 +132,7 @@ namespace ApiAssessmentTest
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
-        public async Task EditUserType_ValidInput_ReturnsOkResult()
+        public async Task EditUserType_ValidUserTypeId_ReturnsOkResult()
         {
             // Arrange
             var id = Guid.NewGuid();
