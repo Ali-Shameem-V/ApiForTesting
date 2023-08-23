@@ -24,7 +24,7 @@ namespace ApiAssessmentTest.V1.Controller
         }
 
         [Fact]
-        public async Task AddAppUser_ValidInput_ReturnsOkResult()
+        public async void AddAppUser_ValidAppUser_ReturnsOkResult()
         {
             // Arrange
             var appuser = fixture.Create<appuser>();
@@ -35,12 +35,14 @@ namespace ApiAssessmentTest.V1.Controller
 
 
             // Act
-            var result =  _sut.AddAppUser(appuser);
+            var result =  await _sut.AddAppUser(appuser);
 
             // Assert
             result.Should().NotBeNull();
-            result.Should().BeAssignableTo<Task<IActionResult>>();
-            result.Result.Should().BeAssignableTo<OkObjectResult>();
+            result.Should().BeAssignableTo<IActionResult>();
+            result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().Be(expectedAppUser);
+           
+
         }
         [Fact]
         public void AddAppUser_WhenUserTypeIdNull_ShouldReturnBadRequest()
@@ -48,7 +50,6 @@ namespace ApiAssessmentTest.V1.Controller
             //Arrange
             var user = fixture.Create<appuser>();
             user.UserTypeId = null;
-            var expectedExceptionMessage = "Please give a valid foreign key";
             //var returnData = fixture.Create<appuser>();
             appUserInterface.Setup(c => c.AddAppUser(user)).ReturnsAsync((appuser)null);
             //Act
@@ -76,12 +77,12 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.AddAppUser(appuser);
 
             // Assert
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
+             result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(500);
          
-            statusCodeResult.StatusCode.Should().Be(500);
         }
         [Fact]
-        public async Task GetAllAppUser_ValidData_ReturnsOkResult()
+        public async Task GetAllAppUser_AppUsersFopund_ReturnsOkResult()
         {
             // Arrange
             var expectedAppUsers = fixture.Create<List<appuser>>();
@@ -102,7 +103,7 @@ namespace ApiAssessmentTest.V1.Controller
         }
 
         [Fact]
-        public async Task GetAllAppUser_NoData_ReturnsNotFoundResult()
+        public async Task GetAllAppUser_NoAppUsersFound_ReturnsNotFoundResult()
         {
             // Arrange
             appUserInterface.Setup(x => x.GetAllAppUser())
@@ -182,8 +183,8 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.GetAllAppUserByUserType(userType);
 
             // Assert
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
         public async Task EditAppUser_ValidAppUserId_ReturnsOkResultWithModifiedData()
@@ -202,8 +203,8 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.EditAppUser(appUserId, appuser);
 
             // Assert
-            var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            okResult.Value.Should().BeAssignableTo<appuser>();
+             result.Should().BeOfType<OkObjectResult>().Subject
+                .Value.Should().BeAssignableTo<appuser>();
 
 
         }
@@ -242,8 +243,8 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
         public async Task DeleteAppUser_ValidAppUserId_ReturnsOkResult()
@@ -297,8 +298,8 @@ namespace ApiAssessmentTest.V1.Controller
             var result = await _sut.DeleteAppUser(idToDelete);
 
             // Assert
-            var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(500);
+             result.Should().BeOfType<StatusCodeResult>().Subject
+                .StatusCode.Should().Be(500);
         }
     }
 }
