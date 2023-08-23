@@ -42,6 +42,8 @@ namespace ApiAssessmentTest
              result.Should().BeOfType<OkObjectResult>().Subject
                    .Value.Should().BeAssignableTo<usertype>().Subject
                    .Should().BeEquivalentTo(expectedUserTypeDetail);
+             usertypeInterface.Verify(r => r.AddUserType(usertype), Times.Once());
+
         }
         [Fact]
         public void AddUserType_WhenUserTypeIdNull_ShouldReturnBadRequest()
@@ -57,9 +59,11 @@ namespace ApiAssessmentTest
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Task<IActionResult>>();
             result.Result.Should().BeAssignableTo<BadRequestObjectResult>();
+            usertypeInterface.Verify(r => r.AddUserType(user), Times.Never());
+
         }
 
-        
+
 
         [Fact]
         public async Task AddUserType_Exception_ReturnsInternalServerError()
@@ -77,25 +81,29 @@ namespace ApiAssessmentTest
             // Assert
             result.Should().BeOfType<StatusCodeResult>().Subject
                   .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            usertypeInterface.Verify(r => r.AddUserType(usertype), Times.Once());
+
         }
 
         [Fact]
         public async Task GetAllUserTypes_NotEmptyUserType_ReturnsOkResultWithUserTypes()
         {
-                // Arrange
-                var expectedUserTypes = fixture.Create<IEnumerable<usertype>>();
+            // Arrange
+            var expectedUserTypes = fixture.Create<IEnumerable<usertype>>();
 
-                usertypeInterface.Setup(x => x.GetAllUserTypes())
-                                    .ReturnsAsync(expectedUserTypes);
+            usertypeInterface.Setup(x => x.GetAllUserTypes())
+                                .ReturnsAsync(expectedUserTypes);
 
 
-                // Act
-                var result = await _sut.GetAllUserTypes();
+            // Act
+            var result = await _sut.GetAllUserTypes();
 
-                // Assert
-                 result.Should().BeOfType<OkObjectResult>().Subject
-                       .Value.Should().BeAssignableTo<IEnumerable<usertype>>().Subject
-                       .Should().BeEquivalentTo(expectedUserTypes);
+            // Assert
+                result.Should().BeOfType<OkObjectResult>().Subject
+                    .Value.Should().BeAssignableTo<IEnumerable<usertype>>().Subject
+                    .Should().BeEquivalentTo(expectedUserTypes);
+                usertypeInterface.Verify(r => r.GetAllUserTypes(), Times.Once());
+
         }
 
         [Fact]
@@ -112,6 +120,8 @@ namespace ApiAssessmentTest
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+            usertypeInterface.Verify(r => r.GetAllUserTypes(), Times.Once());
+
         }
 
         [Fact]
@@ -128,6 +138,8 @@ namespace ApiAssessmentTest
             // Assert
             result.Should().BeOfType<StatusCodeResult>().Subject
                   .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            usertypeInterface.Verify(r => r.GetAllUserTypes(), Times.Once());
+
         }
         [Fact]
         public async Task EditUserType_ValidUserTypeId_ReturnsOkResult()
@@ -148,6 +160,8 @@ namespace ApiAssessmentTest
             result.Should().BeOfType<OkObjectResult>().Subject.Value
                   .Should().BeAssignableTo<usertype>().Subject
                   .Should().BeEquivalentTo(expectedUserTypeToEdit);
+            usertypeInterface.Verify(r => r.EditUserType(id,usertype), Times.Once());
+
         }
 
         [Fact]
@@ -164,6 +178,8 @@ namespace ApiAssessmentTest
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+            usertypeInterface.Verify(r => r.EditUserType(id, null), Times.Once());
+
         }
 
         [Fact]
@@ -183,6 +199,8 @@ namespace ApiAssessmentTest
             // Assert
              result.Should().BeOfType<StatusCodeResult>().Subject
                    .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            usertypeInterface.Verify(r => r.EditUserType(id, usertype), Times.Once());
+
         }
     }
 }

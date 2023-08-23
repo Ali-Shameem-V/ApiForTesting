@@ -41,6 +41,8 @@ namespace ApiAssessmentTest.V1.Controller
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<IActionResult>();
             result.Should().BeAssignableTo<OkObjectResult>().Subject.Value.Should().Be(expectedAppUser);
+
+            appUserInterface.Verify(r=>r.AddAppUser(appuser),Times.Once());
            
 
         }
@@ -58,9 +60,12 @@ namespace ApiAssessmentTest.V1.Controller
             result.Should().NotBeNull();
             result.Should().BeAssignableTo<Task<IActionResult>>();
             result.Result.Should().BeAssignableTo<BadRequestObjectResult>();
+            appUserInterface.Verify(r => r.AddAppUser(user), Times.Once());
+
+
         }
 
-       
+
 
 
         [Fact]
@@ -79,7 +84,8 @@ namespace ApiAssessmentTest.V1.Controller
             // Assert
              result.Should().BeOfType<StatusCodeResult>().Subject
                 .StatusCode.Should().Be(500);
-         
+            appUserInterface.Verify(r => r.AddAppUser(appuser), Times.Once());
+
         }
         [Fact]
         public async Task GetAllAppUser_AppUsersFopund_ReturnsOkResult()
@@ -98,6 +104,8 @@ namespace ApiAssessmentTest.V1.Controller
             result.Should().BeOfType<OkObjectResult>().Subject.Value
                   .Should().BeAssignableTo<List<appuser>>().Subject
                   .Should().BeEquivalentTo(expectedAppUsers);
+            appUserInterface.Verify(r => r.GetAllAppUser(), Times.Once());
+
         }
 
         [Fact]
@@ -113,6 +121,8 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+            appUserInterface.Verify(r => r.GetAllAppUser(), Times.Once());
+
         }
 
         [Fact]
@@ -128,6 +138,8 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             result.Should().BeOfType<BadRequestResult>();
+            appUserInterface.Verify(r => r.GetAllAppUser(), Times.Once());
+
         }
         [Fact]
         public async Task GetAllAppUserByUserType_ValidUserType_ReturnsOkResult()
@@ -140,6 +152,7 @@ namespace ApiAssessmentTest.V1.Controller
                                 .ReturnsAsync(expectedAppUsers);
 
 
+
             // Act
             var result = await _sut.GetAllAppUserByUserType(userType);
 
@@ -147,6 +160,8 @@ namespace ApiAssessmentTest.V1.Controller
             result.Should().BeOfType<OkObjectResult>().Subject.Value
                   .Should().BeAssignableTo<IEnumerable<appuser>>().Subject
                   .Should().BeEquivalentTo(expectedAppUsers);
+            appUserInterface.Verify(r => r.GetAllAppUserByUserType(userType), Times.Once());
+
         }
 
         [Fact]
@@ -164,6 +179,8 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+            appUserInterface.Verify(r => r.GetAllAppUserByUserType(userType), Times.Once());
+
         }
 
         [Fact]
@@ -182,6 +199,8 @@ namespace ApiAssessmentTest.V1.Controller
             // Assert
             result.Should().BeOfType<StatusCodeResult>().Subject
                   .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            appUserInterface.Verify(r => r.GetAllAppUserByUserType(userType), Times.Once());
+
         }
         [Fact]
         public async Task EditAppUser_ValidAppUserId_ReturnsOkResultWithModifiedData()
@@ -202,6 +221,8 @@ namespace ApiAssessmentTest.V1.Controller
             // Assert
              result.Should().BeOfType<OkObjectResult>().Subject
                    .Value.Should().BeAssignableTo<appuser>();
+            appUserInterface.Verify(r => r.EditAppUser(appUserId,appuser), Times.Once());
+
 
 
         }
@@ -222,6 +243,8 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+            appUserInterface.Verify(r => r.EditAppUser(appUserId, appuser), Times.Once());
+
         }
 
         [Fact]
@@ -238,10 +261,13 @@ namespace ApiAssessmentTest.V1.Controller
             // Act
             var result = await _sut.EditAppUser(id, appuser);
 
+
             // Assert
             
             result.Should().BeOfType<StatusCodeResult>().Subject
                   .StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
+            appUserInterface.Verify(r => r.EditAppUser(id, appuser), Times.Once());
+
         }
         [Fact]
         public async Task DeleteAppUser_ValidAppUserId_ReturnsOkResult()
@@ -261,6 +287,8 @@ namespace ApiAssessmentTest.V1.Controller
             result.Should().BeOfType<OkObjectResult>().Subject
                     .Value.Should().BeAssignableTo<appuser>().Subject
                     .Should().BeEquivalentTo(expectedDeletedUser);
+            appUserInterface.Verify(r => r.DeleteAppUser(idToDelete), Times.Once());
+
         }
 
         [Fact]
@@ -278,6 +306,8 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
+            appUserInterface.Verify(r => r.DeleteAppUser(idToDelete), Times.Once());
+
         }
 
         [Fact]
@@ -296,6 +326,8 @@ namespace ApiAssessmentTest.V1.Controller
             // Assert
              result.Should().BeOfType<StatusCodeResult>().Subject
                    .StatusCode.Should().Be(500);
+            appUserInterface.Verify(r => r.DeleteAppUser(idToDelete), Times.Once());
+
         }
     }
 }
