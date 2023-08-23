@@ -42,14 +42,14 @@ namespace ApiAssessmentTest.V1.Controller
             result.Result.Should().BeAssignableTo<OkObjectResult>();
         }
         [Fact]
-        public void AddAppUser_ShouldReturnBadRequest_WhenForeignkeyIsInValid()
+        public void AddAppUser_WhenUserTypeIdNull_ShouldReturnBadRequest()
         {
             //Arrange
             var user = fixture.Create<appuser>();
             user.UserTypeId = null;
             var expectedExceptionMessage = "Please give a valid foreign key";
-            var returnData = fixture.Create<appuser>();
-            appUserInterface.Setup(c => c.AddAppUser(user)).Throws(new Exception(expectedExceptionMessage));
+            //var returnData = fixture.Create<appuser>();
+            appUserInterface.Setup(c => c.AddAppUser(user)).ReturnsAsync((appuser)null);
             //Act
             var result = _sut.AddAppUser(user);
             //Assert
@@ -76,6 +76,7 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             var statusCodeResult = result.Should().BeOfType<StatusCodeResult>().Subject;
+         
             statusCodeResult.StatusCode.Should().Be(500);
         }
         [Fact]
@@ -93,6 +94,7 @@ namespace ApiAssessmentTest.V1.Controller
 
             // Assert
             var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
+
             var resultValue = okResult.Value.Should().BeAssignableTo<List<appuser>>().Subject;
 
             resultValue.Should().BeEquivalentTo(expectedAppUsers);
@@ -128,7 +130,7 @@ namespace ApiAssessmentTest.V1.Controller
             result.Should().BeOfType<BadRequestResult>();
         }
         [Fact]
-        public async Task GetAllAppUserByUserType_ValidInput_ReturnsOkResult()
+        public async Task GetAllAppUserByUserType_ValidUserType_ReturnsOkResult()
         {
             // Arrange
             var userType = fixture.Create<string>();
@@ -149,7 +151,7 @@ namespace ApiAssessmentTest.V1.Controller
         }
 
         [Fact]
-        public async Task GetAllAppUserByUserType_NoAppUsers_ReturnsNotFoundResult()
+        public async Task GetAllAppUserByUserType_InvalidUserType_ReturnsNotFoundResult()
         {
             // Arrange
             var userType = fixture.Create<string>();
@@ -183,42 +185,41 @@ namespace ApiAssessmentTest.V1.Controller
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
-        public async Task EditAppUser_ValidInput_ReturnsOkResultWithModifiedData()
+        public async Task EditAppUser_ValidAppUserId_ReturnsOkResultWithModifiedData()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var appUserId = Guid.NewGuid();
             var appuser = fixture.Create<appuser>();
             var existingAppUser = fixture.Create<appuser>();
             
 
-            appUserInterface.Setup(x => x.EditAppUser(id, appuser))
+            appUserInterface.Setup(x => x.EditAppUser(appUserId, appuser))
                                 .ReturnsAsync(existingAppUser);
 
 
             // Act
-            var result = await _sut.EditAppUser(id, appuser);
+            var result = await _sut.EditAppUser(appUserId, appuser);
 
             // Assert
             var okResult = result.Should().BeOfType<OkObjectResult>().Subject;
-            var resultValue = okResult.Value.Should().BeAssignableTo<appuser>().Subject;
+            var resultValue = okResult.Value.Should().BeAssignableTo<appuser>();
 
-            /*resultValue.Should().BeEquivalentTo(modifiedAppUser, options =>
-                options.ExcludingMissingMembers());*/
+            
         }
 
         [Fact]
-        public async Task EditAppUser_NotFound_ReturnsNotFoundResult()
+        public async Task EditAppUser_InvalidAppUserId_ReturnsNotFoundResult()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var appUserId = Guid.NewGuid();
             var appuser = fixture.Create<appuser>();
 
-            appUserInterface.Setup(x => x.EditAppUser(id, appuser))
+            appUserInterface.Setup(x => x.EditAppUser(appUserId, appuser))
                                 .ReturnsAsync((appuser)null);
 
 
             // Act
-            var result = await _sut.EditAppUser(id, appuser);
+            var result = await _sut.EditAppUser(appUserId, appuser);
 
             // Assert
             result.Should().BeOfType<NotFoundResult>();
@@ -243,7 +244,7 @@ namespace ApiAssessmentTest.V1.Controller
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
         }
         [Fact]
-        public async Task DeleteAppUser_ValidId_ReturnsOkResult()
+        public async Task DeleteAppUser_ValidAppUserId_ReturnsOkResult()
         {
             // Arrange
             var idToDelete = Guid.NewGuid();
@@ -264,7 +265,7 @@ namespace ApiAssessmentTest.V1.Controller
         }
 
         [Fact]
-        public async Task DeleteAppUser_InvalidId_ReturnsNotFoundResult()
+        public async Task DeleteAppUser_InvalidAppUserId_ReturnsNotFoundResult()
         {
             // Arrange
             var idToDelete = Guid.NewGuid();

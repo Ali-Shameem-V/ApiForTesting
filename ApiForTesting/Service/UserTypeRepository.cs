@@ -14,13 +14,10 @@ namespace ApiForTesting.Service
             this.apiDbContext = apiDbContext;
         }
         public async Task<usertype> AddUserType([FromBody] usertype usertype)
-        {
-           
-                apiDbContext.usertypes_shameem.AddAsync(usertype);
+        {           
+                await apiDbContext.usertypes_shameem.AddAsync(usertype);
                 await apiDbContext.SaveChangesAsync();
-                return usertype;
-        
-            
+                return usertype;                     
         }
         public async Task<IEnumerable<usertype>> GetAllUserTypes()
         {

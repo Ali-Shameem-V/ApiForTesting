@@ -25,8 +25,12 @@ namespace ApiForTesting.Controllers
                 if (usertype.UserTypeId != null)
                 {
                     var usertype_detail = await UserTypeInterface.AddUserType(usertype);
+                    /*if (usertype_detail != null)
+                    {*/
 
-                    return Ok(usertype_detail);
+                        return Ok(usertype_detail);
+                   /* }
+                    return BadRequest("UserType-ID already exist");*/
                 }
                 return BadRequest("UserType-ID cant be Null");
             }

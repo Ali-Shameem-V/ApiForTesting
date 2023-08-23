@@ -20,13 +20,12 @@ namespace ApiForTesting.Controllers
         {
             try
             {
-                 
-                    if (appuser.UserTypeId == null)
-                    {
-                        
+                var appusers = await AppUserInterface.AddAppUser(appuser);
+
+                if (appusers == null)
+                    {                        
                         return BadRequest("Please give a valid foreign key");
                     }
-                var appusers = await AppUserInterface.AddAppUser(appuser);
 
                 return Ok(appusers);
             }
@@ -49,7 +48,6 @@ namespace ApiForTesting.Controllers
             }
             catch 
             {
-                // You might want to log the exception here for debugging purposes
                 return BadRequest();
             }
         }
@@ -68,7 +66,6 @@ namespace ApiForTesting.Controllers
             }
             catch 
             {
-                // You might want to log the exception here for debugging purposes
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -84,9 +81,7 @@ namespace ApiForTesting.Controllers
                     appuser_toedit.UserName = appuser.UserName ?? appuser_toedit.UserName;
                     appuser_toedit.Password = appuser.Password ?? appuser_toedit.Password;
                     appuser_toedit.IsActive = appuser.IsActive ?? appuser_toedit.IsActive;
-                   /* appuser_toedit.UserType = appuser.UserType ?? appuser_toedit.UserType;
-                    appuser_toedit.UserName = appuser.UserName ?? appuser.UserName;
-                    appuser_toedit.UserTypeId = appuser.UserTypeId ?? appuser.UserTypeId;*/
+                  
                   
                     return Ok(appuser_toedit);
                 }
@@ -115,9 +110,8 @@ namespace ApiForTesting.Controllers
                     return NotFound();
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                // You might want to log the exception here for debugging purposes
                 return StatusCode(500);
             }
         }
